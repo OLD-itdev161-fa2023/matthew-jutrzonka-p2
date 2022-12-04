@@ -37,7 +37,6 @@ const CreatePost = ({ token, onPostCreated }) => {
                     }
                 };
 
-                // Create the post
                 const body = JSON.stringify(newPost);
                 const res = await axios.post(
                     'http://localhost:5000/api/posts',
@@ -45,7 +44,6 @@ const CreatePost = ({ token, onPostCreated }) => {
                     config
                 );
 
-                // Call the handler and redirect
                 onPostCreated(res.data);
                 history.push('/');
             } catch (error) {

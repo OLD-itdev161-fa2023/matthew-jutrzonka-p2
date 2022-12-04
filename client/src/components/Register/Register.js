@@ -44,11 +44,9 @@ const Register = ({ authenticateUser }) => {
                 const body = JSON.stringify(newUser);
                 const res = await axios.post('http://localhost:5000/api/users', body, config);
         
-                // Store user data and redirect
                 localStorage.setItem('token', res.data.token);
                 history.push('/');
             } catch (error) {
-                // Clear user data and set errors
                 localStorage.removeItem('token');
         
                 setErrorData({

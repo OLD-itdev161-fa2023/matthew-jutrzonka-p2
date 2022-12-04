@@ -37,7 +37,6 @@ const EditPost = ({ token, post, onPostUpdated }) => {
                     }
                 };
 
-                // Create the post
                 const body = JSON.stringify(newPost);
                 const res = await axios.put(
                     `http://localhost:5000/api/posts/${post._id}`,
@@ -45,7 +44,6 @@ const EditPost = ({ token, post, onPostUpdated }) => {
                     config
                 );
 
-                // Call the handler and redirect
                 onPostUpdated(res.data);
                 history.push('/');
             } catch (error) {
