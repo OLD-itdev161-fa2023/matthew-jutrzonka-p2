@@ -1,3 +1,4 @@
 {
-    "mongoURI": "mongodb+srv://matthew_jutrzonka:iAyj6cMZVVTQqznw@cluster0.p1fm7dk.mongodb.net/?retryWrites=true&w=majority"
+    "mongoURI": "mongodb+srv://matthew_jutrzonka:iAyj6cMZVVTQqznw@cluster0.p1fm7dk.mongodb.net/?retryWrites=true&w=majority",
+    "jwtSecret": "Happy Birthday!"
 }
