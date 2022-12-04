@@ -6,34 +6,26 @@ import Register from './components/Register/Register';
 import Login from './components/Login/Login';
 import PostList from './components/PostList/PostList';
 import Post from './components/Post/Post';
+import CreatePost from './components/Post/CreatePost';
+import EditPost from './components/Post/EditPost';
 
 class App extends React.Component {
   state = {
     posts: [],
-    post: [],
+    post: null,
     token: null,
     user: null
   };
 
   componentDidMount() {
-    axios.get('http://localhost:5000')
-      .then((response) => {
-        this.setState({
-          data: response.data
-        })
-      })
-      .catch((error) => {
-        console.error(`Error fetching data: ${error}`);
-      })
-
-      this.authenticateUser();
+    this.authenticateUser();
   }
 
   authenticateUser = () => {
     const token = localStorage.getItem('token');
 
-    if(!token) {
-      localStorage.removeItem('user')
+    if (!token) {
+      localStorage.removeItem('user');
       this.setState({ user: null });
     }
 
@@ -42,10 +34,11 @@ class App extends React.Component {
         headers: {
           'x-auth-token': token
         }
-      }
-      axios.get('http://localhost:5000/api/auth', config)
-        .then((response) => {
-          localStorage.setItem('user', response.data.name)
+      };
+      axios
+        .get('http://localhost:5000/api/auth', config)
+        .then(response => {
+          localStorage.setItem('user', response.data.name);
           this.setState(
             {
               user: response.data.name,
@@ -56,13 +49,13 @@ class App extends React.Component {
             }
           );
         })
-        .catch((error) => {
+        .catch(error => {
           localStorage.removeItem('user');
           this.setState({ user: null });
           console.error(`Error logging in: ${error}`);
-        })
+        });
     }
-  }
+  };
 
   loadData = () => {
     const { token } = this.state;
@@ -86,17 +79,11 @@ class App extends React.Component {
     }
   };
 
-  render() {
-    let { user, posts, post } = this.state;
-    const authProps = {
-      authenticateUser: this.authenticateUser
-    };
-  
   logOut = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     this.setState({ user: null, token: null });
-  }
+  };
 
   viewPost = post => {
     console.log(`view ${post.title}`);
@@ -128,7 +115,39 @@ class App extends React.Component {
         });
     }
   };
-  
+
+  editPost = post => {
+    this.setState({
+      post: post
+    });
+  };
+
+  onPostCreated = post => {
+    const newPosts = [...this.state.posts, post];
+
+    this.setState({
+      posts: newPosts
+    });
+  };
+
+  onPostUpdated = post => {
+    console.log('updated post: ', post);
+    const newPosts = [...this.state.posts];
+    const index = newPosts.findIndex(p => p._id === post._id);
+
+    newPosts[index] = post;
+
+    this.setState({
+      posts: newPosts
+    });
+  };
+
+  render() {
+    let { user, posts, post, token } = this.state;
+    const authProps = {
+      authenticateUser: this.authenticateUser
+    };
+
     return (
       <Router>
         <div className="App">
@@ -139,14 +158,20 @@ class App extends React.Component {
                 <Link to="/">Home</Link>
               </li>
               <li>
-                <Link to="/register">Register</Link>
+                {user ? (
+                  <Link to="/new-post">New Post</Link>
+                ) : (
+                  <Link to="/register">Register</Link>
+                )}
               </li>
               <li>
-                {user ? 
-                  <Link to="" onClick={this.logOut}>Log out</Link> :
-                  <Link to="/login">Log in</Link> 
-                }
-                
+                {user ? (
+                  <Link to="" onClick={this.logOut}>
+                    Log out
+                  </Link>
+                ) : (
+                  <Link to="/login">Log in</Link>
+                )}
               </li>
             </ul>
           </header>
