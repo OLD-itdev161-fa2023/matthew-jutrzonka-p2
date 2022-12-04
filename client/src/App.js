@@ -104,6 +104,30 @@ class App extends React.Component {
       post: post
     });
   };
+
+  deletePost = post => {
+    const { token } = this.state;
+
+    if (token) {
+      const config = {
+        headers: {
+          'x-auth-token': token
+        }
+      };
+
+      axios
+        .delete(`http://localhost:5000/api/posts/${post._id}`, config)
+        .then(response => {
+          const newPosts = this.state.posts.filter(p => p._id !== post._id);
+          this.setState({
+            posts: [...newPosts]
+          });
+        })
+        .catch(error => {
+          console.error(`Error deleting post: ${error}`);
+        });
+    }
+  };
   
     return (
       <Router>
