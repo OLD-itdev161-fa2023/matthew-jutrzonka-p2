@@ -69,7 +69,7 @@ class App extends React.Component {
       <Router>
         <div className="App">
           <header className="App-header">
-            <h1>GoodThings</h1>
+            <h1>Matthew Jutrzonka Project 2</h1>
             <ul>
               <li>
                 <Link to="/">Home</Link>
